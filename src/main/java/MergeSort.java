@@ -1,9 +1,9 @@
 import java.util.concurrent.RecursiveAction;
 
 public class MergeSort extends RecursiveAction {
-    int[] array;
-    int left;
-    int right;
+    private int[] array;
+    private int left;
+    private int right;
 
     public MergeSort(int[] array, int left, int right) {
         this.array = array;

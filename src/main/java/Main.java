@@ -3,7 +3,8 @@ import java.util.concurrent.ForkJoinPool;
 
 public class Main {
 
-    public static final int ARRAY_SIZE = 10_000_000;
+    public static final int ARRAY_SIZE = 1_000_000;
+    public static final int STEP_SIZE = ARRAY_SIZE/100;
 
     public static void main(String[] args) {
 
@@ -13,12 +14,26 @@ public class Main {
         int[] array = createArray(ARRAY_SIZE);
         MergeSort mergeSort = new MergeSort(array, 0, ARRAY_SIZE - 1);
 
+        System.out.println("-------------------------------------------------------------------------------------");
+
         startTime = System.currentTimeMillis();
         forkJoinPool.invoke(mergeSort);
-        System.out.println("В массиве " + ARRAY_SIZE + " элементов. (шаг 100_000) :");
         endTime = System.currentTimeMillis();
-        printArray(array);
-        System.out.println("На сортировку понадобилось: " + (endTime-startTime) + " ms!");
+        System.out.println("В массиве " + ARRAY_SIZE + " элементов. (шаг " + STEP_SIZE + ") :");
+        printArray(array, STEP_SIZE);
+        System.out.println("На сортировку с помощью ForkJoinFramework понадобилось: " + (endTime-startTime) + " ms!");
+
+        System.out.println("-------------------------------------------------------------------------------------");
+
+        int[] ints = createArray(ARRAY_SIZE);
+        startTime = System.currentTimeMillis();
+        BubbleSort bubbleSort = new BubbleSort(ints);
+        endTime = System.currentTimeMillis();
+        System.out.println("В массиве " + ARRAY_SIZE + " элементов. (шаг " + STEP_SIZE + ") :");
+        printArray(bubbleSort.getArray(), STEP_SIZE);
+        System.out.println("На сортировку с помощью Bubbl понадобилось: " + (endTime-startTime) + " ms!");
+
+        System.out.println("-------------------------------------------------------------------------------------");
 
     }
 
@@ -31,10 +46,10 @@ public class Main {
         return array;
     }
 
-    private static void printArray(int[] array){
+    private static void printArray(int[] array, int step){
         int size = array.length;
-        for (int i = 0; i < size; i += 100_000){
-            if(i%1000_000 == 0) {
+        for (int i = 0; i < size; i += step){
+            if(i%(step*10) == 0) {
                 System.out.println();
 //                System.out.print(i + "-" + (i+1000_000) + ":\t");
             }
